@@ -1,5 +1,4 @@
 <h1 align="center">Local Datastorage Express</h1>
-<img href="./background.png" align="center">
 
 <br>
 A simple, fast and easy datastorage system :D
@@ -27,3 +26,5 @@ const datastorage = require("local_db_express"); // chamando o modulo...
 const db = new datastorage(); // Criando uma db com todas as funções
 console.log(db.mapAll()); // Print db maping.
 ```
+
+<img src="background.png" align="center">
