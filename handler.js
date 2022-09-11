@@ -27,7 +27,7 @@
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-
+// LDE Docs: https://gabriel-ramires-de-oliveira.gitbook.io/local-db-express-docs/
 
 
 THIS IS A SELF MADE DATABASE system! ;D
@@ -53,84 +53,29 @@ Sub:
 
 2. exemples:
 
-how works?
-A little and "simple" exemple:
-SCRIPT MOMENT: -------------------------------------------------------------------------------
-// exemple script starts
-const datastorage = require("local_db_express"); // calling
+The exemples scripts has been moveds to LDE Docs..
+https://gabriel-ramires-de-oliveira.gitbook.io/local-db-express-docs/exemplos
 
-// Runs in a async function. Because the awaits.. Responses.
-async function run(my_string_value) {
-  const documentName = "my_document";
 
-  const new_collection_name = await datastorage.collection.create(
-    "my_collection"
-  );
-  // new_collection returns the collection name! (when created.)
-
-  const added_document = await datastorage.document.add(
-    new_collection_name,
-    documentName,
-    {
-      tip: "you can put json arrays or just a little string.",
-      info: my_string_value,
-    }
-  ); // TIP: if you want in the "new_collection_name" you can just put the collection normal name. EX: "my_collection"
-
-  const getted_document = await datastorage.document.get(
-    new_collection_name,
-    documentName
-  );
-
-  console.log(getted_document);
-  console.log("wait...");
-  setTimeout(async () => {
-    console.log("Oh no!!! I forgot something!... MY NAME!!!!");
-  }, 1000);
-
-  // wait... Oh no!!! I forgot something!... MY NAME!!!!
-  setTimeout(async () => {
-    const updated_document = await datastorage.document.update(
-      new_collection_name,
-      documentName,
-      function (oldData) {
-        const newData = oldData; // create a new array with the oldData.
-
-        newData.name = "RamiresOliv"; // i am added my name in.
-
-        return newData; // and just return the new array or string. End :D
-      }
-    );
-
-    console.log(updated_document);
-    console.log("AUGHHHHHHH, oh.. solved! :D");
-    console.log("in 30s the document and the collection will be deleted.");
-    setTimeout(async () => {
-      const delete_document = await datastorage.document.delete(
-        new_collection_name,
-        documentName
-      );
-      const delete_collection = await datastorage.collection.delete(
-        new_collection_name
-      );
-      console.log("Thank you <3 bye bye!!");
-    }, 30000);
-  }, 2000);
-}
-
-// running :3
-run("I am using LDE! Per my first time!!");
-// exemple script ends
-SCRIPT END -------------------------------------------------------------------------------
-*/
+.
+.
+.
+.
+.
+.
+.                                                                                                                                                                                                                                                                            */
 
 // Open Configurations:
 
-// config_file_path_in_db_folder:
-// Okay, this is REALLY important! It is recommended to always leave "false" Because this will make the configuration file stay in the root of the project ("./") if "false".
-// But if it is already true, the configuration file will stay inside the database folder, and with that it can generate some bugs of not being able to change the name of the datatorage_folder folder.
+// project_worker:
+// This don't require changes! If you using this module in npm this already will works!
+// But if you not using in the npm module you just will need change this to "./" ONLY! or idk
+// FOLLOW THIS RULE: The result just need to be your project workspace root.
+// In this case "__dirname" will say "node_modules/local_db_express" for solve this i putted "/../../" so will be this: "/" - root
+project_root = __dirname + "/../../";
+
 config_file_name = "ldeConfigs.json"; // <-- Nah, does't need attention because the default config is already good.
-config_file_path = "./" + config_file_name; // <-- Configuration file path. No require attention and the default config is already perfect.
+config_file_path = project_worker + config_file_name; // <-- Configuration file path. No require attention and the default config is already perfect.
 add_keep_file_in_db_folder = true; // adds ONLY if doen't exists a ""!FILE!"" in the directory.
 on_success_message = "Done!"; // this will affect when the action successfully executed. ehhh i not recomend to change it :l
 
@@ -168,16 +113,10 @@ if (!existsSync(config_file_path)) {
 
 const { global, exportation } = require(config_file_path);
 
-if (!existsSync("./" + global.datastorage_folder)) {
-  mkdirSync("./" + global.datastorage_folder);
-}
-
-if (
-  existsSync("./" + global.datastorage_folder) &&
-  config_file_path.includes(global.datastorage_folder)
-) {
+if (!existsSync(project_root + global.datastorage_folder)) {
+  mkdirSync(project_root + global.datastorage_folder);
   writeFileSync(
-    "./" + global.datastorage_folder + "/" + ".keep",
+    project_root + global.datastorage_folder + "/" + "info",
     "LDE worker directory. (Database system.)"
   );
 }
@@ -193,17 +132,14 @@ if (exportation == null) {
     "Error FATAL: Script stopped because the configuration file don't exists. Calling 'exportation' - Database script has been aborted. Please solve this error more fast possible."
   );
 }
-const export_folder_exists = existsSync(
-  global.datastorage_folder + "/" + exportation.export_folder
-);
-if (!export_folder_exists) {
-  mkdirSync(global.datastorage_folder + "/" + exportation.export_folder);
-}
 
-writeFileSync(
-  global.datastorage_folder + "/" + exportation.export_folder + "/" + ".keep",
-  "LDE Collections directory"
-);
+if (!existsSync(global.datastorage_folder + "/" + exportation.export_folder)) {
+  mkdirSync(global.datastorage_folder + "/" + exportation.export_folder);
+  writeFileSync(
+    global.datastorage_folder + "/" + exportation.export_folder + "/" + "info",
+    "LDE Datastorage saves directory (Database system.)"
+  );
+}
 
 exports.mapAll = () => {
   const collections = readdirSync(
@@ -237,6 +173,7 @@ exports.mapAll = () => {
   return conclusion;
 };
 
+// Collections workers
 exports.collection.create = async (CollectionName = String) => {
   if (!CollectionName || typeof CollectionName != "string") {
     return {
@@ -437,6 +374,7 @@ exports.collection.exists = async (CollectionName) => {
   }
 };
 
+// Documents workers
 exports.document.add = async (Collection, classification, document) => {
   if (!classification || typeof classification != "string") {
     return {
@@ -454,12 +392,17 @@ exports.document.add = async (Collection, classification, document) => {
       message: "É necessário enviar junto o nome da coleção. STRING",
     };
   }
-  if (typeof document != "object" || typeof document != "string") {
+  if (
+    !typeof document === "object" ||
+    !typeof document === "array" ||
+    !typeof document === "string"
+  ) {
     return {
       success: false,
       errcode: 3,
       effect: "Nenhum.",
-      message: "É nessesario enviar junto uma function. STRING || OBJECT",
+      message:
+        "É nessesario enviar junto o conteúdo do documento. STRING || OBJECT || ARRAY",
     };
   }
   if (
@@ -666,8 +609,16 @@ exports.document.update = async (Collection, classification, changer) => {
       exportation.file_type.replace(".", "")
   );
 
-  const function_result = changer(JSON.parse(r));
-
+  const function_result = await changer(JSON.parse(r));
+  if (function_result == undefined || function_result == null) {
+    return {
+      success: false,
+      errcode: 3,
+      effect: "Nenhum.",
+      message: "A função que foi provida não retornou nenhum valor.",
+    };
+  }
+  console.log(function_result);
   writeFileSync(
     global.datastorage_folder +
       "/" +
@@ -797,10 +748,15 @@ exports.document.exists = async (Collection, classification) => {
     return true;
   }
 };
-exports.Finish = () => {
+exports.configFile = () => {
+  const conf_file = readFileSync(config_file_path);
+  return JSON.parse(conf_file);
+};
+exports.finish = () => {
   return true;
 };
 // Finished. ✌
 // This is all! Thank you too mutch for use <3
 
 // Ela é amiga da minha mulher...
+// LDE Docs: https://gabriel-ramires-de-oliveira.gitbook.io/local-db-express-docs/
