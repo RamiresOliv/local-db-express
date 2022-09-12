@@ -1,6 +1,6 @@
 <h1 align="center">Local Datastorage Express</h1>
 
-A simple, fast and easy datastorage system :D
+A simple, fast and easy datastorage system.
 
 Agora a LDE ta de novo nome! "local-db-express"
 
@@ -29,4 +29,4 @@ datastorage.mapAll().then((result) => {
 });
 ```
 
-<img src="background.png" align="center">
+<img src="./images/background.png" align="center">

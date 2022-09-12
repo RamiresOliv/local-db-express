@@ -71,8 +71,8 @@ https://gabriel-ramires-de-oliveira.gitbook.io/local-db-express-docs/exemplos
 // This don't require changes! If you using this module in npm this already will works!
 // But if you not using in the npm module you just will need change this to "./" ONLY! or idk
 // FOLLOW THIS RULE: The result just need to be your project workspace root.
-// In this case "__dirname" will say "node_modules/local_db_express" for solve this i putted "/../../" so will be this: "/" - root
-project_root = __dirname + "/../../";
+// In this case "__dirname" will say "node_modules/local_db_express" for solve this i putted "/../../../" so will be this: "/" - root
+project_root = __dirname + "/../../../";
 
 config_file_name = "ldeConfigs.json"; // <-- Nah, does't need attention because the default config is already good.
 config_file_path = project_root + config_file_name; // <-- Configuration file path. No require attention and the default config is already perfect.
@@ -140,38 +140,6 @@ if (!existsSync(global.datastorage_folder + "/" + exportation.export_folder)) {
     "LDE Datastorage saves directory (Database system.)"
   );
 }
-
-exports.mapAll = () => {
-  const collections = readdirSync(
-    global.datastorage_folder + "/" + exportation.export_folder,
-    {
-      withFileTypes: true,
-    }
-  )
-    .filter((item) => item.isDirectory())
-    .map((dirent) => dirent.name);
-
-  const conclusion = {};
-
-  collections.forEach((collection) => {
-    conclusion[collection] = [];
-    const documents = readdirSync(
-      global.datastorage_folder +
-        "/" +
-        exportation.export_folder +
-        "/" +
-        collection
-    ).filter((item) =>
-      item.endsWith("." + exportation.file_type.replace(".", ""))
-    );
-    console.log(documents);
-    documents.forEach((doc) => {
-      conclusion[collection].push(doc);
-    });
-  });
-
-  return conclusion;
-};
 
 // Collections workers
 exports.collection.create = async (CollectionName = String) => {
@@ -748,13 +716,47 @@ exports.document.exists = async (Collection, classification) => {
     return true;
   }
 };
-exports.configFile = () => {
+
+exports.mapAll = async () => {
+  const collections = readdirSync(
+    global.datastorage_folder + "/" + exportation.export_folder,
+    {
+      withFileTypes: true,
+    }
+  )
+    .filter((item) => item.isDirectory())
+    .map((dirent) => dirent.name);
+
+  const conclusion = {};
+
+  collections.forEach((collection) => {
+    conclusion[collection] = [];
+    const documents = readdirSync(
+      global.datastorage_folder +
+        "/" +
+        exportation.export_folder +
+        "/" +
+        collection
+    ).filter((item) =>
+      item.endsWith("." + exportation.file_type.replace(".", ""))
+    );
+    documents.forEach((doc) => {
+      conclusion[collection].push(doc);
+    });
+  });
+
+  return conclusion;
+};
+
+exports.configFile = async () => {
   const conf_file = readFileSync(config_file_path);
   return JSON.parse(conf_file);
 };
-exports.finish = () => {
+
+exports.finish = async () => {
   return true;
 };
+
 // Finished. ✌
 // This is all! Thank you too mutch for use <3
 
