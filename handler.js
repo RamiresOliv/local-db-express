@@ -67,7 +67,7 @@ https://gabriel-ramires-de-oliveira.gitbook.io/local-db-express-docs/exemplos
 
 // Open Configurations:
 
-// project_worker:
+// project_root:
 // This don't require changes! If you using this module in npm this already will works!
 // But if you not using in the npm module you just will need change this to "./" ONLY! or idk
 // FOLLOW THIS RULE: The result just need to be your project workspace root.
@@ -75,7 +75,7 @@ https://gabriel-ramires-de-oliveira.gitbook.io/local-db-express-docs/exemplos
 project_root = __dirname + "/../../";
 
 config_file_name = "ldeConfigs.json"; // <-- Nah, does't need attention because the default config is already good.
-config_file_path = project_worker + config_file_name; // <-- Configuration file path. No require attention and the default config is already perfect.
+config_file_path = project_root + config_file_name; // <-- Configuration file path. No require attention and the default config is already perfect.
 add_keep_file_in_db_folder = true; // adds ONLY if doen't exists a ""!FILE!"" in the directory.
 on_success_message = "Done!"; // this will affect when the action successfully executed. ehhh i not recomend to change it :l
 
