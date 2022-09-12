@@ -753,7 +753,7 @@ exports.configFile = async () => {
   return JSON.parse(conf_file);
 };
 
-exports.finish = async () => {
+exports.finish = () => {
   return true;
 };
 

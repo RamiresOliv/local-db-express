@@ -1,6 +1,6 @@
 {
   "name": "local-db-express",
-  "version": "1.4.5",
+  "version": "1.4.7",
   "description": "A simple, fast and easy datastorage system.",
   "main": "./src/main.js",
   "directories": {
