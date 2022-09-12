@@ -1,5 +1,5 @@
 // exemple script starts
-const datastorage = require("local_db_express"); // calling
+const datastorage = require("local-db-express"); // calling
 
 // Runs in a async function. Because the awaits.. Responses.
 async function run(my_string_value) {
