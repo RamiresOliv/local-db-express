@@ -1,6 +1,6 @@
 {
-  "name": "local_db_express",
-  "version": "1.4.1",
+  "name": "local-db-express",
+  "version": "1.4.2",
   "description": "A simple, fast and easy datastorage system.",
   "main": "handler.js",
   "directories": {
@@ -19,12 +19,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RamiresOliv/local_db_express.git"
+    "url": "git+https://github.com/RamiresOliv/local-db-express.git"
   },
   "author": "RamiresOliv",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/RamiresOliv/local_db_express/issues"
+    "url": "https://github.com/RamiresOliv/local-db-express/issues"
   },
-  "homepage": "https://github.com/RamiresOliv/local_db_express#readme"
+  "homepage": "https://github.com/RamiresOliv/local-db-express#readme"
 }

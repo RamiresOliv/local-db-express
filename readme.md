@@ -1,30 +1,28 @@
 <h1 align="center">Local Datastorage Express</h1>
 
-<br>
 A simple, fast and easy datastorage system :D
-
-Modulo na [https://www.npmjs.com](https://www.npmjs.com) Repo [npm package](https://www.npmjs.com/package/local_db_express)
-
-A documentação sobre a LDE está em PT-BR. Menos o modulo.
+Agora a LDE ta de novo nome! "local-db-express"
+Modulo [npm package](https://www.npmjs.com/package/local-db-express)
 
 ## Instalação:
 
 ```sh
-$ npm install local_db_express
+$ npm install local-db-express
 ```
 
 ## Documentação
 
-Mais informações sobre a LDE está em [LDE-Docs](https://gabriel-ramires-de-oliveira.gitbook.io/local-datastorage-express-documentations/)
+Mais informações sobre a LDE está em [LDE-Docs](https://gabriel-ramires-de-oliveira.gitbook.io/local-db-express-docs)
 A documentação sobre a LDE está em PT-BR
 
 ## Exemplo de chamagem:
 
 ```js
-const datastorage = require("local_db_express"); // chamando o modulo...
+const datastorage = require("local-db-express"); // chamando o modulo...
 
-const db = new datastorage(); // Criando uma db com todas as funções
-console.log(db.mapAll()); // Print db maping.
+datastorage.mapAll().then((result) => {
+  console.log(result); // Print db maping.
+});
 ```
 
 <img src="background.png" align="center">
