@@ -1,8 +1,12 @@
 <h1 align="center">Local Datastorage Express</h1>
 
 A simple, fast and easy datastorage system :D
+
 Agora a LDE ta de novo nome! "local-db-express"
+
 Modulo [npm package](https://www.npmjs.com/package/local-db-express)
+
+Repositório [GitHub Repo](https://github.com/RamiresOliv/local-db-express)
 
 ## Instalação:
 
