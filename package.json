@@ -1,13 +1,13 @@
 {
   "name": "local-db-express",
-  "version": "1.4.7",
+  "version": "1.4.9",
   "description": "A simple, fast and easy datastorage system.",
   "main": "./src/main.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "start": "testing.js",
+    "start": "handler.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -15,7 +15,9 @@
     "db",
     "database",
     "datastorage",
-    "pt br"
+    "pt-br",
+    "free",
+    "simple"
   ],
   "repository": {
     "type": "git",

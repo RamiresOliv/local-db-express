@@ -208,7 +208,7 @@ exports.collection.delete = async (CollectionName) => {
     file.endsWith("." + exportation.file_type.replace(".", ""))
   );
 
-  documents.forEach((v, i) => {
+  documents.forEach((v) => {
     unlinkSync(
       global.datastorage_folder +
         "/" +
@@ -313,7 +313,7 @@ exports.collection._length = async (CollectionName) => {
     file.endsWith("." + exportation.file_type.replace(".", ""))
   );
   let count = 0;
-  documents.forEach((document) => {
+  documents.forEach(() => {
     count = count + 1;
   });
   return count;
@@ -478,7 +478,7 @@ exports.document.get = async (Collection, classification) => {
   ) {
     return {
       success: false,
-      errcode: 22,
+      errcode: 12,
       effect: "Nenhum.",
       message: "Esse documento não existe!",
     };
@@ -586,7 +586,6 @@ exports.document.update = async (Collection, classification, changer) => {
       message: "A função que foi provida não retornou nenhum valor.",
     };
   }
-  console.log(function_result);
   writeFileSync(
     global.datastorage_folder +
       "/" +
@@ -657,7 +656,7 @@ exports.document.delete = async (Collection, classification) => {
   ) {
     return {
       success: false,
-      errcode: 12,
+      errcode: 22,
       effect: "Nenhum.",
       message: "Esse documento já não existe!",
     };
