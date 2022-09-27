@@ -54,7 +54,7 @@ Sub:
 2. exemples:
 
 The exemples scripts has been moveds to LDE Docs..
-https://gabriel-ramires-de-oliveira.gitbook.io/local-db-express-docs/exemplos
+https://ramiresoliv.gitbook.io/local-datastorage-express-documentations/
 
 
 .
@@ -760,4 +760,4 @@ exports.finish = () => {
 // This is all! Thank you too mutch for use <3
 
 // Ela é amiga da minha mulher...
-// LDE Docs: https://gabriel-ramires-de-oliveira.gitbook.io/local-db-express-docs/
+// LDE Docs: https://ramiresoliv.gitbook.io/local-datastorage-express-documentations/

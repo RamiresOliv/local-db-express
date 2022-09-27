@@ -16,7 +16,7 @@ $ npm install local-db-express
 
 ## Documentação
 
-Mais informações sobre a LDE está em [LDE-Docs](https://gabriel-ramires-de-oliveira.gitbook.io/local-db-express-docs)
+Mais informações sobre a LDE está em [LDE-Docs](https://ramiresoliv.gitbook.io/local-datastorage-express-documentations/)
 A documentação sobre a LDE está em PT-BR
 
 ## Exemplo de chamagem:
