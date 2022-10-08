@@ -260,6 +260,12 @@ exports.collection.clear = async (CollectionName) => {
     };
   }
 
+  const documents = readdirSync(
+    global.datastorage_folder +
+      "/" +
+      exportation.export_folder +
+      "/" +
+      CollectionName)
   documents.forEach((v, i) => {
     unlinkSync(
       global.datastorage_folder +
