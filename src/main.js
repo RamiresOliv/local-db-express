@@ -132,11 +132,11 @@ if (exportation == null) {
     "Error FATAL: Script stopped because the configuration file don't exists. Calling 'exportation' - Database script has been aborted. Please solve this error more fast possible."
   );
 }
-
-if (!existsSync(global.datastorage_folder + "/" + exportation.export_folder)) {
-  mkdirSync(global.datastorage_folder + "/" + exportation.export_folder);
+if (!existsSync(project_root + "/" + global.datastorage_folder + "/" + exportation.export_folder)) {
+  mkdirSync(project_root + "/" + global.datastorage_folder + "/" + exportation.export_folder);
   writeFileSync(
-    global.datastorage_folder + "/" + exportation.export_folder + "/" + "info",
+    project_root + "/" +
+      global.datastorage_folder + "/" + exportation.export_folder + "/" + "info",
     "LDE Datastorage saves directory (Database system.)"
   );
 }
@@ -152,7 +152,7 @@ exports.collection.create = async (CollectionName = String) => {
     };
   }
   if (
-    !existsSync(
+    !existsSync(project_root + "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
@@ -160,7 +160,7 @@ exports.collection.create = async (CollectionName = String) => {
         CollectionName
     )
   ) {
-    mkdirSync(
+    mkdirSync(project_root + "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
@@ -183,6 +183,7 @@ exports.collection.delete = async (CollectionName) => {
   }
   if (
     !existsSync(
+      project_root + "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
@@ -198,7 +199,7 @@ exports.collection.delete = async (CollectionName) => {
     };
   }
 
-  const documents = readdirSync(
+  const documents = readdirSync(project_root+ "/" +
     global.datastorage_folder +
       "/" +
       exportation.export_folder +
@@ -209,7 +210,7 @@ exports.collection.delete = async (CollectionName) => {
   );
 
   documents.forEach((v) => {
-    unlinkSync(
+    unlinkSync(project_root+ "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
@@ -220,7 +221,7 @@ exports.collection.delete = async (CollectionName) => {
     );
   });
 
-  rmdirSync(
+  rmdirSync(project_root+ "/" +
     global.datastorage_folder +
       "/" +
       exportation.export_folder +
@@ -245,6 +246,7 @@ exports.collection.clear = async (CollectionName) => {
   }
   if (
     !existsSync(
+      project_root + "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
@@ -261,13 +263,15 @@ exports.collection.clear = async (CollectionName) => {
   }
 
   const documents = readdirSync(
-    global.datastorage_folder +
+    project_root + "/" +
+      global.datastorage_folder +
       "/" +
       exportation.export_folder +
       "/" +
       CollectionName)
   documents.forEach((v, i) => {
     unlinkSync(
+      project_root + "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
@@ -295,6 +299,7 @@ exports.collection._length = async (CollectionName) => {
   }
   if (
     !existsSync(
+      project_root + "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
@@ -310,7 +315,8 @@ exports.collection._length = async (CollectionName) => {
     };
   }
   const documents = readdirSync(
-    global.datastorage_folder +
+    project_root + "/" +
+      global.datastorage_folder +
       "/" +
       exportation.export_folder +
       "/" +
@@ -335,6 +341,7 @@ exports.collection.exists = async (CollectionName) => {
   }
   if (
     !existsSync(
+      project_root + "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
@@ -381,6 +388,7 @@ exports.document.add = async (Collection, classification, document) => {
   }
   if (
     !existsSync(
+      project_root + "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
@@ -397,6 +405,7 @@ exports.document.add = async (Collection, classification, document) => {
   }
   if (
     existsSync(
+      project_root + "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
@@ -416,7 +425,8 @@ exports.document.add = async (Collection, classification, document) => {
     };
   }
   writeFileSync(
-    global.datastorage_folder +
+    project_root + "/" +
+      global.datastorage_folder +
       "/" +
       exportation.export_folder +
       "/" +
@@ -455,6 +465,7 @@ exports.document.get = async (Collection, classification) => {
   }
   if (
     !existsSync(
+      project_root + "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
@@ -471,6 +482,7 @@ exports.document.get = async (Collection, classification) => {
   }
   if (
     !existsSync(
+      project_root + "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
@@ -490,7 +502,8 @@ exports.document.get = async (Collection, classification) => {
     };
   }
   const r = readFileSync(
-    global.datastorage_folder +
+    project_root + "/" +
+      global.datastorage_folder +
       "/" +
       exportation.export_folder +
       "/" +
@@ -536,6 +549,7 @@ exports.document.update = async (Collection, classification, changer) => {
   }
   if (
     !existsSync(
+      project_root + "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
@@ -552,6 +566,7 @@ exports.document.update = async (Collection, classification, changer) => {
   }
   if (
     !existsSync(
+      project_root + "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
@@ -572,7 +587,8 @@ exports.document.update = async (Collection, classification, changer) => {
   }
 
   const r = readFileSync(
-    global.datastorage_folder +
+    project_root + "/" +
+      global.datastorage_folder +
       "/" +
       exportation.export_folder +
       "/" +
@@ -593,7 +609,8 @@ exports.document.update = async (Collection, classification, changer) => {
     };
   }
   writeFileSync(
-    global.datastorage_folder +
+    project_root + "/" +
+      global.datastorage_folder +
       "/" +
       exportation.export_folder +
       "/" +
@@ -633,6 +650,7 @@ exports.document.delete = async (Collection, classification) => {
   }
   if (
     !existsSync(
+      project_root + "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
@@ -649,6 +667,7 @@ exports.document.delete = async (Collection, classification) => {
   }
   if (
     !existsSync(
+      project_root + "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
@@ -668,7 +687,8 @@ exports.document.delete = async (Collection, classification) => {
     };
   }
   unlinkSync(
-    global.datastorage_folder +
+    project_root + "/" +
+      global.datastorage_folder +
       "/" +
       exportation.export_folder +
       "/" +
@@ -703,8 +723,10 @@ exports.document.exists = async (Collection, classification) => {
       message: "É nessesario enviar junto o nome da coleção. STRING",
     };
   }
+  
   if (
     !existsSync(
+      project_root + "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
@@ -724,7 +746,8 @@ exports.document.exists = async (Collection, classification) => {
 
 exports.mapAll = async () => {
   const collections = readdirSync(
-    global.datastorage_folder + "/" + exportation.export_folder,
+    project_root + "/" +
+      global.datastorage_folder + "/" + exportation.export_folder,
     {
       withFileTypes: true,
     }
@@ -737,6 +760,7 @@ exports.mapAll = async () => {
   collections.forEach((collection) => {
     conclusion[collection] = [];
     const documents = readdirSync(
+      project_root + "/" +
       global.datastorage_folder +
         "/" +
         exportation.export_folder +
