@@ -1,4 +1,4 @@
-/* lul
+/* cool
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 |                ██╗      ██████╗  ██████╗ █████╗ ██╗         ██████╗  █████╗ ████████╗ █████╗ ███████╗████████╗ ██████╗ ██████╗  █████╗  ██████╗ ███████╗               |
@@ -27,13 +27,13 @@
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-// LDE Docs: https://gabriel-ramires-de-oliveira.gitbook.io/local-db-express-docs/
+// LDE Docs: https://ramiresoliv.gitbook.io/local-db-express-docs/
 
 
 THIS IS A SELF MADE DATABASE system! ;D
 used ONLY fs here B)
 
-This is a cool database system. (simple)
+This is a cool database system. (very, very simple!!)
 ------------------------------------------------------------------------------------------------------------
 
 1. error codes:
@@ -71,23 +71,62 @@ https://ramiresoliv.gitbook.io/local-datastorage-express-documentations/
 // This don't require changes! If you using this module in npm this already will works!
 // But if you not using in the npm module you just will need change this to "./" ONLY! or idk
 // FOLLOW THIS RULE: The result just need to be your project workspace root.
-// In this case "__dirname" will say "node_modules/local_db_express" for solve this i putted "/../../../" so will be this: "/" - root
+// In this case "__dirname" will say "node_modules/local_db_express" for solve this just got added "/../../../".
 project_root = __dirname + "/../../../";
 
 config_file_name = "ldeConfigs.json"; // <-- Nah, does't need attention because the default config is already good.
 config_file_path = project_root + config_file_name; // <-- Configuration file path. No require attention and the default config is already perfect.
-add_keep_file_in_db_folder = true; // adds ONLY if doen't exists a ""!FILE!"" in the directory.
-on_success_message = "Done!"; // this will affect when the action successfully executed. ehhh i not recomend to change it :l
+add_keep_file_in_db_folder = true; // adds ONLY if doesn't exists a file called "info" in the directory. (this is just a placehold ig: for github)
 
-// The default configs obj is only called if already don't exists a config.json in the db folder.
-// But no panic the module creates one when ready
+// The default configs obj will be used if don't exists a ldeConfigs.json in your workspace.
+// When executed for the first time ou deletado o arquivo de confgurações a copy of the default configs is created in your workspace ;)
 default_configs = {
   global: {
-    datastorage_folder: "./database", // Change the db folder name here! the slash is REQUIRED! Exemple: "./<yourdDatabaseDirectory>".
+    datastorage_folder: "./database", // Change the db folder name here, the "./" is REQUIRED! Exemple: "./<yourdDatabaseDirectory>".
   },
   exportation: {
     export_folder: "base", // Same thing happens here. but here you don't need use slash! Exemple: "<yourCollectionsDirectory>". On module started this is will be the result path: Exemple: "./database/base"
-    file_type: ".db", // Exemple: ".db" or can be ".json" the result will be: "./database/base/My_Collection/Cool_Document.db"
+    file_type: ".json", // Exemple: ".db" or can be ".json" the result will be: "./database/base/My_Collection/Cool_Document.json"
+  },
+};
+
+const systemMessages = {
+  effects: {
+    // Global
+    None: "None.",
+
+    // Collection
+    CollectionCleaned: "Collection has been cleaned.",
+    CollectionDeleted: "The collection has been deleted.",
+
+    // Document
+    DocumentAdded: "Document has been created.",
+    DocumentRewrited: "The document was re-written.",
+    DocumentDeleted: "The document has been deleted.",
+  },
+  messages: {
+    // Global
+    Done: "Done.",
+
+    // Collection
+    ErrorCollectionName:
+      "It is necessary to send the name of the collection together. STRING",
+    ErrorCollectionAlreadyNotExists: "This collection no longer exists!",
+    ErrorCollectionNotExists: "This collection does not exist!",
+    CollectionDeleted: "This collection has been deleted.",
+
+    // Document
+    ErrorDocumentName:
+      "It is necessary to send the name of the document along with it. STRING",
+    ErrorDocumentAlreadyExists: "This document already exists!",
+    ErrorDocumentAlreadyNotExists: "This document no longer exists!",
+    ErrorDocumentNotExists: "This document does not exist!",
+    ErrorDocumentData:
+      "It is necessary to send the content of the document together. STRING || OBJECT || ARRAY",
+    ErrorDocumentUpdateFunction:
+      "It is necessary to send a function together. FUNCTION",
+    ErrorDocumentUpdateFunctionNullReturn:
+      "The function that was provided did not return any value.",
   },
 };
 
@@ -127,16 +166,52 @@ if (!exportation) exportation = default_configs.exportation;
 exports.collection = {};
 exports.document = {};
 
+let CurrentCollectionName = "test";
+const add = async (name, data) => {
+  return await exports.document.add(CurrentCollectionName, name, data);
+};
+const update = async (name, data) => {
+  return await exports.document.update(CurrentCollectionName, name, data);
+};
+const get = async (name) => {
+  return await exports.document.get(CurrentCollectionName, name);
+};
+const del = async (name) => {
+  return await exports.document.delete(CurrentCollectionName, name);
+};
+const exists = async (name) => {
+  return await exports.document.exists(CurrentCollectionName, name);
+};
+
 if (exportation == null) {
   throw new Error(
     "Error FATAL: Script stopped because the configuration file don't exists. Calling 'exportation' - Database script has been aborted. Please solve this error more fast possible."
   );
 }
-if (!existsSync(project_root + "/" + global.datastorage_folder + "/" + exportation.export_folder)) {
-  mkdirSync(project_root + "/" + global.datastorage_folder + "/" + exportation.export_folder);
+if (
+  !existsSync(
+    project_root +
+      "/" +
+      global.datastorage_folder +
+      "/" +
+      exportation.export_folder
+  )
+) {
+  mkdirSync(
+    project_root +
+      "/" +
+      global.datastorage_folder +
+      "/" +
+      exportation.export_folder
+  );
   writeFileSync(
-    project_root + "/" +
-      global.datastorage_folder + "/" + exportation.export_folder + "/" + "info",
+    project_root +
+      "/" +
+      global.datastorage_folder +
+      "/" +
+      exportation.export_folder +
+      "/" +
+      "info",
     "LDE Datastorage saves directory (Database system.)"
   );
 }
@@ -147,29 +222,48 @@ exports.collection.create = async (CollectionName = String) => {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message: "É necessário enviar junto o nome da coleção. STRING",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorCollectionName,
     };
   }
+  CurrentCollectionName = CollectionName;
   if (
-    !existsSync(project_root + "/" +
-      global.datastorage_folder +
+    !existsSync(
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
         CollectionName
     )
   ) {
-    mkdirSync(project_root + "/" +
-      global.datastorage_folder +
+    mkdirSync(
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
         CollectionName
     );
-    return CollectionName;
+    return {
+      name: CollectionName,
+      add: add,
+      get: get,
+      update: update,
+      delete: del,
+      docExists: exists,
+    };
   } else {
-    return CollectionName;
+    return {
+      name: CollectionName,
+      add: add,
+      get: get,
+      update: update,
+      delete: del,
+      docExists: exists,
+    };
   }
 };
 exports.collection.delete = async (CollectionName) => {
@@ -177,14 +271,15 @@ exports.collection.delete = async (CollectionName) => {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message: "É necessário enviar junto o nome da coleção. STRING",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorCollectionName,
     };
   }
   if (
     !existsSync(
-      project_root + "/" +
-      global.datastorage_folder +
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
@@ -194,13 +289,15 @@ exports.collection.delete = async (CollectionName) => {
     return {
       success: false,
       errcode: 21,
-      effect: "Nenhum.",
-      message: "Essa coleção já não existe!",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorCollectionAlreadyNotExists,
     };
   }
 
-  const documents = readdirSync(project_root+ "/" +
-    global.datastorage_folder +
+  const documents = readdirSync(
+    project_root +
+      "/" +
+      global.datastorage_folder +
       "/" +
       exportation.export_folder +
       "/" +
@@ -210,8 +307,10 @@ exports.collection.delete = async (CollectionName) => {
   );
 
   documents.forEach((v) => {
-    unlinkSync(project_root+ "/" +
-      global.datastorage_folder +
+    unlinkSync(
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
@@ -221,8 +320,10 @@ exports.collection.delete = async (CollectionName) => {
     );
   });
 
-  rmdirSync(project_root+ "/" +
-    global.datastorage_folder +
+  rmdirSync(
+    project_root +
+      "/" +
+      global.datastorage_folder +
       "/" +
       exportation.export_folder +
       "/" +
@@ -231,8 +332,8 @@ exports.collection.delete = async (CollectionName) => {
   return {
     success: true,
     errcode: 0,
-    effect: "A coleção foi apagada.",
-    message: "Essa coleção foi deletada",
+    effect: systemMessages.effects.CollectionDeleted,
+    message: systemMessages.messages.CollectionDeleted,
   };
 };
 exports.collection.clear = async (CollectionName) => {
@@ -240,14 +341,15 @@ exports.collection.clear = async (CollectionName) => {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message: "É necessário enviar junto o nome da coleção. STRING",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorCollectionName,
     };
   }
   if (
     !existsSync(
-      project_root + "/" +
-      global.datastorage_folder +
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
@@ -257,22 +359,25 @@ exports.collection.clear = async (CollectionName) => {
     return {
       success: false,
       errcode: 11,
-      effect: "Nenhum.",
-      message: "Essa coleção não existe!",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorCollectionNotExists,
     };
   }
 
   const documents = readdirSync(
-    project_root + "/" +
+    project_root +
+      "/" +
       global.datastorage_folder +
       "/" +
       exportation.export_folder +
       "/" +
-      CollectionName)
+      CollectionName
+  );
   documents.forEach((v, i) => {
     unlinkSync(
-      project_root + "/" +
-      global.datastorage_folder +
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
@@ -284,8 +389,13 @@ exports.collection.clear = async (CollectionName) => {
   return {
     success: true,
     errcode: 0,
-    effect: "Coleção limpa.",
-    message: on_success_message,
+    effect: systemMessages.effects.CollectionCleaned,
+    message: systemMessages.messages.Done,
+    add: add,
+    get: get,
+    update: update,
+    delete: del,
+    docExists: exists,
   };
 };
 exports.collection._length = async (CollectionName) => {
@@ -293,14 +403,15 @@ exports.collection._length = async (CollectionName) => {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message: "É necessário enviar junto o nome da coleção. STRING",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorCollectionName,
     };
   }
   if (
     !existsSync(
-      project_root + "/" +
-      global.datastorage_folder +
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
@@ -310,12 +421,13 @@ exports.collection._length = async (CollectionName) => {
     return {
       success: false,
       errcode: 11,
-      effect: "Nenhum.",
-      message: "Essa coleção não existe!",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorCollectionNotExists,
     };
   }
   const documents = readdirSync(
-    project_root + "/" +
+    project_root +
+      "/" +
       global.datastorage_folder +
       "/" +
       exportation.export_folder +
@@ -335,23 +447,40 @@ exports.collection.exists = async (CollectionName) => {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message: "É necessário enviar junto o nome da coleção. STRING",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorCollectionName,
     };
   }
   if (
     !existsSync(
-      project_root + "/" +
-      global.datastorage_folder +
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
         CollectionName
     )
   ) {
-    return false;
+    return {
+      exists: false,
+      name: CollectionName,
+      add: add,
+      get: get,
+      update: update,
+      delete: del,
+      docExists: exists,
+    };
   } else {
-    return true;
+    return {
+      exists: true,
+      name: CollectionName,
+      add: add,
+      get: get,
+      update: update,
+      delete: del,
+      docExists: exists,
+    };
   }
 };
 
@@ -361,16 +490,16 @@ exports.document.add = async (Collection, classification, document) => {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message: "É necessário enviar junto o nome do documento. Ex: STRING",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorDocumentName,
     };
   }
   if (!Collection || typeof Collection != "string") {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message: "É necessário enviar junto o nome da coleção. STRING",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorCollectionName,
     };
   }
   if (
@@ -381,15 +510,15 @@ exports.document.add = async (Collection, classification, document) => {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message:
-        "É nessesario enviar junto o conteúdo do documento. STRING || OBJECT || ARRAY",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorDocumentData,
     };
   }
   if (
     !existsSync(
-      project_root + "/" +
-      global.datastorage_folder +
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
@@ -399,14 +528,15 @@ exports.document.add = async (Collection, classification, document) => {
     return {
       success: false,
       errcode: 11,
-      effect: "Nenhum.",
-      message: "Essa coleção não existe!",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorCollectionNotExists,
     };
   }
   if (
     existsSync(
-      project_root + "/" +
-      global.datastorage_folder +
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
@@ -420,12 +550,13 @@ exports.document.add = async (Collection, classification, document) => {
     return {
       success: false,
       errcode: 21,
-      effect: "Nenhum.",
-      message: "Esse documento já existe!",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorDocumentAlreadyExists,
     };
   }
   writeFileSync(
-    project_root + "/" +
+    project_root +
+      "/" +
       global.datastorage_folder +
       "/" +
       exportation.export_folder +
@@ -440,10 +571,10 @@ exports.document.add = async (Collection, classification, document) => {
   return {
     success: true,
     errcode: 0,
-    effect: "Documento foi criado.",
+    effect: systemMessages.effects.DocumentAdded,
     document: document,
     collection: Collection,
-    message: on_success_message,
+    message: systemMessages.messages.Done,
   };
 };
 exports.document.get = async (Collection, classification) => {
@@ -451,22 +582,23 @@ exports.document.get = async (Collection, classification) => {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message: "É nessesario enviar junto o nome do documento. STRING",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorDocumentName,
     };
   }
   if (!Collection || typeof Collection != "string") {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message: "É nessesario enviar junto o nome da coleção. STRING",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorCollectionName,
     };
   }
   if (
     !existsSync(
-      project_root + "/" +
-      global.datastorage_folder +
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
@@ -476,14 +608,15 @@ exports.document.get = async (Collection, classification) => {
     return {
       success: false,
       errcode: 11,
-      effect: "Nenhum.",
-      message: "Essa coleção não existe!",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorCollectionNotExists,
     };
   }
   if (
     !existsSync(
-      project_root + "/" +
-      global.datastorage_folder +
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
@@ -497,12 +630,13 @@ exports.document.get = async (Collection, classification) => {
     return {
       success: false,
       errcode: 12,
-      effect: "Nenhum.",
-      message: "Esse documento não existe!",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorDocumentNotExists,
     };
   }
   const r = readFileSync(
-    project_root + "/" +
+    project_root +
+      "/" +
       global.datastorage_folder +
       "/" +
       exportation.export_folder +
@@ -516,10 +650,10 @@ exports.document.get = async (Collection, classification) => {
   return {
     success: true,
     errcode: 0,
-    effect: "Nenhum.",
+    effect: systemMessages.effects.None,
     document: JSON.parse(r),
     collection: Collection,
-    message: on_success_message,
+    message: systemMessages.messages.Done,
   };
 };
 exports.document.update = async (Collection, classification, changer) => {
@@ -527,30 +661,31 @@ exports.document.update = async (Collection, classification, changer) => {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message: "É nessesario enviar junto uma function. FUNCTION",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorDocumentUpdateFunction,
     };
   }
   if (!classification || typeof classification != "string") {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message: "É nessesario enviar junto o nome do documento. STRING",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorDocumentName,
     };
   }
   if (!Collection || typeof Collection != "string") {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message: "É nessesario enviar junto o nome da coleção. STRING",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorCollectionName,
     };
   }
   if (
     !existsSync(
-      project_root + "/" +
-      global.datastorage_folder +
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
@@ -560,14 +695,15 @@ exports.document.update = async (Collection, classification, changer) => {
     return {
       success: false,
       errcode: 11,
-      effect: "Nenhum.",
-      message: "Essa coleção não existe!",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorCollectionNotExists,
     };
   }
   if (
     !existsSync(
-      project_root + "/" +
-      global.datastorage_folder +
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
@@ -581,13 +717,14 @@ exports.document.update = async (Collection, classification, changer) => {
     return {
       success: false,
       errcode: 12,
-      effect: "Nenhum.",
-      message: "Esse documento não existe!",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorDocumentNotExists,
     };
   }
 
   const r = readFileSync(
-    project_root + "/" +
+    project_root +
+      "/" +
       global.datastorage_folder +
       "/" +
       exportation.export_folder +
@@ -604,12 +741,13 @@ exports.document.update = async (Collection, classification, changer) => {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message: "A função que foi provida não retornou nenhum valor.",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorDocumentUpdateFunctionNullReturn,
     };
   }
   writeFileSync(
-    project_root + "/" +
+    project_root +
+      "/" +
       global.datastorage_folder +
       "/" +
       exportation.export_folder +
@@ -625,10 +763,10 @@ exports.document.update = async (Collection, classification, changer) => {
   return {
     success: true,
     errcode: 0,
-    effect: "O documento foi re-escrito.",
+    effect: systemMessages.effects.DocumentRewrited,
     document: function_result,
     collection: Collection,
-    message: on_success_message,
+    message: systemMessages.messages.Done,
   };
 };
 exports.document.delete = async (Collection, classification) => {
@@ -636,22 +774,23 @@ exports.document.delete = async (Collection, classification) => {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message: "É nessesario enviar junto o nome do documento. STRING",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorDocumentName,
     };
   }
   if (!Collection || typeof Collection != "string") {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message: "É nessesario enviar junto o nome da coleção. STRING",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorCollectionName,
     };
   }
   if (
     !existsSync(
-      project_root + "/" +
-      global.datastorage_folder +
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
@@ -661,14 +800,15 @@ exports.document.delete = async (Collection, classification) => {
     return {
       success: false,
       errcode: 11,
-      effect: "Nenhum.",
-      message: "Essa coleção não existe!",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorCollectionNotExists,
     };
   }
   if (
     !existsSync(
-      project_root + "/" +
-      global.datastorage_folder +
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
@@ -682,12 +822,13 @@ exports.document.delete = async (Collection, classification) => {
     return {
       success: false,
       errcode: 22,
-      effect: "Nenhum.",
-      message: "Esse documento já não existe!",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorDocumentAlreadyNotExists,
     };
   }
   unlinkSync(
-    project_root + "/" +
+    project_root +
+      "/" +
       global.datastorage_folder +
       "/" +
       exportation.export_folder +
@@ -701,9 +842,9 @@ exports.document.delete = async (Collection, classification) => {
   return {
     success: true,
     errcode: 0,
-    effect: "O documento foi deletado.",
+    effect: systemMessages.effects.DocumentDeleted,
     collection: Collection,
-    message: on_success_message,
+    message: systemMessages.messages.Done,
   };
 };
 exports.document.exists = async (Collection, classification) => {
@@ -711,23 +852,24 @@ exports.document.exists = async (Collection, classification) => {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message: "É nessesario enviar junto o nome do documento. STRING",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorDocumentName,
     };
   }
   if (!Collection || typeof Collection != "string") {
     return {
       success: false,
       errcode: 3,
-      effect: "Nenhum.",
-      message: "É nessesario enviar junto o nome da coleção. STRING",
+      effect: systemMessages.effects.None,
+      message: systemMessages.messages.ErrorCollectionName,
     };
   }
-  
+
   if (
     !existsSync(
-      project_root + "/" +
-      global.datastorage_folder +
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
@@ -746,8 +888,11 @@ exports.document.exists = async (Collection, classification) => {
 
 exports.mapAll = async () => {
   const collections = readdirSync(
-    project_root + "/" +
-      global.datastorage_folder + "/" + exportation.export_folder,
+    project_root +
+      "/" +
+      global.datastorage_folder +
+      "/" +
+      exportation.export_folder,
     {
       withFileTypes: true,
     }
@@ -760,8 +905,9 @@ exports.mapAll = async () => {
   collections.forEach((collection) => {
     conclusion[collection] = [];
     const documents = readdirSync(
-      project_root + "/" +
-      global.datastorage_folder +
+      project_root +
+        "/" +
+        global.datastorage_folder +
         "/" +
         exportation.export_folder +
         "/" +
@@ -787,7 +933,6 @@ exports.finish = () => {
 };
 
 // Finished. ✌
-// This is all! Thank you too mutch for use <3
+// This is all! Thank you too much for use <3
 
-// Ela é amiga da minha mulher...
 // LDE Docs: https://ramiresoliv.gitbook.io/local-datastorage-express-documentations/
